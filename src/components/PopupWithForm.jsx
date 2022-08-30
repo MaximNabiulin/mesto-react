@@ -1,7 +1,7 @@
 import React from 'react';
 
 function PopupWithForm(props) {
-  const { title, name, children, isOpen, onClose} = props;
+  const { title, name, buttonText, children, isOpen, onClose} = props;
 
   return (
     <div
@@ -26,6 +26,13 @@ function PopupWithForm(props) {
             className="popup__form"
           >
             {children}
+            <button
+              id = "profile-submit"
+              type="submit"
+              className="popup__submit-button"
+            >
+              {buttonText}
+            </button>
           </form>
         </div>
       </div>

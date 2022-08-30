@@ -52,13 +52,13 @@ function App() {
         title="Редактировать профиль"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         <>
           <input type="text" id="name-edit" name="name" placeholder="Имя" minLength="2" maxLength="40" required className="popup__input popup__profile-name"/>
           <span className="name-edit-error popup__error-span"></span>
           <input type="text" id="aboutself-edit" name="about" placeholder="О себе" minLength="2" maxLength="200" required className="popup__input popup__profile-aboutself"/>
           <span className="aboutself-edit-error popup__error-span"></span>
-          <button id = "profile-submit" type="submit" className="popup__submit-button">Сохранить</button>
         </>
       </PopupWithForm>
 
@@ -67,11 +67,11 @@ function App() {
         title="Обновить аватар"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         <>
           <input type="url" id="avatar-edit" name="avatar" placeholder="Ссылка на картинку" required className="popup__input popup__profile-avatar"/>
           <span className="avatar-edit-error popup__error-span"></span>
-          <button id = "avatar-submit" type="submit" className="popup__submit-button">Сохранить</button>
         </>
       </PopupWithForm>
 
@@ -80,13 +80,13 @@ function App() {
         title="Новое Место"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Создать"
       >
         <>
           <input type="text" id="place-name" name="name" placeholder="Название" minLength="2" maxLength="30" required className="popup__input popup__place-name"/>
           <span className="place-name-error popup__error-span"></span>
           <input type="url" id="place-image-link" name="link" placeholder="Ссылка на картинку" required className="popup__input popup__place-image"/>
           <span className="place-image-link-error popup__error-span"></span>
-          <button id = "new-place-submit" type="submit" className="popup__submit-button">Создать</button>
         </>
       </PopupWithForm>
 
@@ -94,8 +94,8 @@ function App() {
         name="delete-card"
         title="Вы уверены?"
         onClose={closeAllPopups}
+        buttonText="Да"
       >
-        <button id = "delete-place-submit" type="submit" className="popup__submit-button">Да</button>
       </PopupWithForm>
 
       <ImagePopup
