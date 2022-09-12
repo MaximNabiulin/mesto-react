@@ -5,9 +5,7 @@ function ImagePopup(props) {
 
   return (
     <div
-      className={ Object.keys(card).length !== 0
-        ? "popup popup_type_image-view popup_opened"
-        : "popup popup_type_image-view" }
+      className={ `popup popup_type_image-view ${Object.keys(card).length !== 0 && 'popup_opened'}` }
     >
         <figure className="popup__image-container">
           <button

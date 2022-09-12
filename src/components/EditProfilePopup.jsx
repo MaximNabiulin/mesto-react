@@ -31,12 +31,6 @@ function EditProfilePopup(props) {
     onUpdateUser({
       name: name,
       about: description,
-    })
-    .then(() => {
-      onClose();
-    })
-    .catch((err) => {
-      console.log(err);
     });
   }
 

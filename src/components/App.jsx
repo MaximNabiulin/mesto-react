@@ -7,7 +7,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import DeleteCardPopup from './DeleteCardPopup';
 import ImagePopup from './ImagePopup';
-import api from '../utils/Api';
+import api from '../utils/api';
 import { CurrentUserContext } from '../context/CurrentUserContext';
 
 function App() {
@@ -61,48 +61,42 @@ function App() {
   };
 
   function handleUpdateUser(currentUser) {
-    return new Promise ((resolve, reject) => {
-      setIsLoading(true);
-      api.editUserInfo(currentUser)
+    setIsLoading(true);
+    api.editUserInfo(currentUser)
       .then((userInfo) => {
         setCurrentUser(userInfo);
-        resolve();
+        closeAllPopups();
       })
-      .catch(reject)
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
-    });
   };
 
   function handleUpdateAvatar(currentUser) {
-    return new Promise ((resolve, reject) => {
-      setIsLoading(true);
-      api.editUserAvatar(currentUser)
+    setIsLoading(true);
+    api.editUserAvatar(currentUser)
       .then((userInfo) => {
         setCurrentUser(userInfo);
-        resolve();
+        closeAllPopups();
       })
-      .catch(reject)
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
-    });
   };
 
   function handleAddPlaceSubmit(card) {
-    return new Promise ((resolve, reject) => {
-      setIsLoading(true);
-      api.addCard(card)
+    setIsLoading(true);
+    api.addCard(card)
       .then(newCard => {
         setCards([newCard, ...cards]);
-        resolve();
+        closeAllPopups();
       })
-      .catch(reject)
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
-    });
   };
 
   function handleCardClick(selectedCard) {
@@ -111,34 +105,28 @@ function App() {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
-    if (!isLiked) {
-      api.setlike(card._id)
-        .then(newCard => {
-          setCards((state) => state.map((item) => item._id === card._id ? newCard : item));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      api.removeLike(card._id)
-        .then((newCard) => {
-          setCards((state) => state.map((item) => item._id === card._id ? newCard : item));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    const action = isLiked
+      ? api.removeLike(card._id)
+      : api.setlike(card._id);
+
+    action
+      .then(newCard => {
+        setCards((state) =>
+          state.map((item) => item._id === card._id ? newCard : item)
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   function handleDeleteCard(card) {
-    return new Promise ((resolve, reject) => {
       api.deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
-        resolve();
+        closeAllPopups();
       })
-      .catch(reject);
-    });
+      .catch((err) => console.log(err));
   }
 
   return (

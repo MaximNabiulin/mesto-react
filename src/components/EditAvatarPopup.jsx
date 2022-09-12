@@ -11,12 +11,6 @@ function EditAvatarPopup(props) {
 
     onUpdateAvatar({
       avatar: avatarLinkInput.current.value,
-    })
-    .then(() => {
-      onClose();
-    })
-    .catch((err) => {
-      console.log(err);
     });
   }
 

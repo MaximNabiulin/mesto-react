@@ -7,13 +7,7 @@ function DeleteCardPopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onDeleteCard(card)
-      .then(() => {
-        onClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    onDeleteCard(card);
   }
 
   return (

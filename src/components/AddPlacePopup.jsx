@@ -4,32 +4,22 @@ import PopupWithForm from './PopupWithForm';
 function AddPlacePopup(props) {
   const { isOpen, onClose, onLoad, onAddPlace } = props;
 
-  const [name, setName] = React.useState('');
-  const [link, setLink] = React.useState('');
+  const [formValues, setFormValues] = React.useState({ name: '', link: '' });
 
-  function handleCardNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleCardLinkChange(e) {
-    setLink(e.target.value);
+  function handleChange(evt) {
+    const {name, value} = evt.target;
+    setFormValues(state => ({ ...state, [name]: value }));
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
     onAddPlace({
-      name: name,
-      link: link
-    })
-    .then(() => {
-      onClose();
-      setName('');
-      setLink('');
-    })
-    .catch((err) => {
-      console.log(err);
+      name: formValues.name,
+      link: formValues.link
     });
+
+    setFormValues({ name: '', link: '' });
   }
 
   return (
@@ -46,8 +36,8 @@ function AddPlacePopup(props) {
               type="text"
               id="place-name"
               name="name"
-              value={name}
-              onChange={handleCardNameChange}
+              value={formValues.name}
+              onChange={handleChange}
               placeholder="Название"
               minLength="2"
               maxLength="30"
@@ -59,8 +49,8 @@ function AddPlacePopup(props) {
               type="url"
               id="place-image-link"
               name="link"
-              value={link}
-              onChange={handleCardLinkChange}
+              value={formValues.link}
+              onChange={handleChange}
               placeholder="Ссылка на картинку"
               required
               className="popup__input popup__place-image"

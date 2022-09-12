@@ -19,7 +19,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   // 3. Редактирование профиля
@@ -33,7 +33,7 @@ class Api {
         about: data.about
       })
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   // 9. Обновление аватара пользователя
@@ -46,7 +46,7 @@ class Api {
         avatar: data.avatar,
       })
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
 // ---- КАРТОЧКИ -----------------
@@ -56,7 +56,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   // 4. Добавление новой карточки
@@ -65,12 +65,9 @@ class Api {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link
-      })
+      body: JSON.stringify(data)
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   // 7. Удаление карточки
@@ -80,7 +77,7 @@ class Api {
       method: 'DELETE',
       headers: this._headers
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   // 8. Постановка и снятие лайка
@@ -90,7 +87,7 @@ class Api {
       method: 'PUT',
       headers: this._headers
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
   removeLike(cardId) {
@@ -98,7 +95,7 @@ class Api {
       method: 'DELETE',
       headers: this._headers
     })
-      .then(res => this._getResponseData(res));
+      .then(this._getResponseData);
   }
 
 }
