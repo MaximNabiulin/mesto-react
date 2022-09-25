@@ -1,5 +1,12 @@
 import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+
+// подключаем объект контекста
+import { CurrentUserContext } from '../context/CurrentUserContext';
+// импортируем компоненты приложения
 import Header from './Header';
+import Register from './Register';
+import Login from './Login';
 import Main from './Main';
 import Footer from './Footer';
 import EditProfilePopup from './EditProfilePopup';
@@ -8,21 +15,26 @@ import AddPlacePopup from './AddPlacePopup';
 import DeleteCardPopup from './DeleteCardPopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
-import { CurrentUserContext } from '../context/CurrentUserContext';
 
 function App() {
+  // Стейт переменные открытия попапов
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
 
+  // Стэйт переменныя для данных пользователя
+  const [currentUser, setCurrentUser] = React.useState({});
 
+  // Стэйт переменные для карточек
   const [cards, setCards] = React.useState([]);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [cardToDelete, setCardToDelete] = React.useState({});
 
-  const [currentUser, setCurrentUser] = React.useState({});
+  // Стейт переменная для индикаторов загрузки запросов на сервер
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     Promise.all([api.getUserInfoFromApi(), api.getInitialCards()])
@@ -129,20 +141,38 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  // Возвращаем разметку
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Header />
-          <Main
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            cards={cards}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleDeleteCardBtnClick}
-          />
+          <Switch>
+            {/* <ProtectedRoute
+              path="/"
+              loggedIn={loggedIn}
+              component={Main}
+            >
+            </ProtectedRoute> */}
+              <Header>
+                <p className="header__user-email">email@mail.com</p>
+                <p className="header__auth">Выйти</p>
+              </Header>
+              <Main
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                cards={cards}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleDeleteCardBtnClick}
+              />
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+          </Switch>
           <Footer />
         </div>
 

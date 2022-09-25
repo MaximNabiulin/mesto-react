@@ -1,0 +1,32 @@
+import React from 'react';
+
+function Auth(props) {
+  const {name, title, buttonText, children, onSubmit } = props;
+
+  return (
+    <div className="auth">
+      <h3 className="auth__title">{title}</h3>
+      <form
+        id={`${name}-form`}
+        name={`${name}-form`}
+        onSubmit={onSubmit}
+        action="#"
+        method="get"
+        noValidate
+        className="auth__form"
+      >
+        {children}
+        <button
+          id = "register-submit"
+          type="submit"
+          className="auth__submit-button"
+
+        >
+          {buttonText}
+        </button>
+      </form>
+    </div>
+  )
+}
+
+export default Auth;

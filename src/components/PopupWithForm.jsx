@@ -22,7 +22,8 @@ function PopupWithForm(props) {
             id={`${name}-form`}
             name={`${name}-form`}
             onSubmit={onSubmit}
-            action="#" method="get"
+            action="#"
+            method="get"
             noValidate
             className="popup__form"
           >
