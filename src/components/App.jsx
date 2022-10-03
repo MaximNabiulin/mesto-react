@@ -8,6 +8,7 @@ import { CurrentUserContext } from '../context/CurrentUserContext';
 import Header from './Header';
 import Register from './Register';
 import Login from './Login';
+import ProtectedRoute from './ProtectedRoute';
 import Main from './Main';
 import Footer from './Footer';
 import EditProfilePopup from './EditProfilePopup';
@@ -17,6 +18,7 @@ import DeleteCardPopup from './DeleteCardPopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import * as auth from '../utils/auth';
+
 
 function App() {
   // Стейт переменные открытия попапов
@@ -170,7 +172,7 @@ function App() {
     return auth.authorize(password, email)
       .then((data) => {
         if (!data.jwt) {
-          return Promise.reject(`Ошибка: ${res.status}`);
+          return Promise.reject(`Ошибка: ${data.status}`);
         }
 
         localStorage.setItem('jwt', data.jwt);
@@ -188,12 +190,12 @@ function App() {
 
   function handleLogout() {}
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isLoggedIn.loggedIn) return;
     history.push('/')
   }, [isLoggedIn.loggedIn]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     function checkToken() {
       if (!localStorage.getItem('jwt')) return;
       const jwt = localStorage.getItem('jwt');
@@ -226,7 +228,7 @@ function App() {
           <Switch>
             <ProtectedRoute
               path="/"
-              loggedIn={loggedIn}
+              loggedIn={isloggedIn.loggedIn}
             >
               <Header>
                 <p className="header__user-email">email@mail.com</p>
