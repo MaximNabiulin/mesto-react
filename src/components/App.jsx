@@ -228,7 +228,7 @@ function App() {
           <Switch>
             <ProtectedRoute
               path="/"
-              loggedIn={isloggedIn.loggedIn}
+              loggedIn={isLoggedIn.loggedIn}
             >
               <Header>
                 <p className="header__user-email">email@mail.com</p>
