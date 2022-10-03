@@ -1,68 +1,77 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Header from './Header';
-import Auth from './Auth';
+import SignForm from './SignForm';
 
-class Login extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      email: '',
-      password: ''
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const initValues = {
+  email: '',
+  password: '',
+}
+function Login(props) {
+  const { onLogin } = props;
+  const [state, setState] = React.useState(initValues);
 
-  handleChange(e) {
-    const {name, value} = e.target;
-    this.setState({
+  const handleChange = (evt) => {
+    const {name, value} = evt.target;
+    setState((oldState) => ({
+      ...oldState,
       [name]: value
-    });
+    }));
   }
-  handleSubmit(e){
-    e.preventDefault();
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
     // здесь обрабатываем вход в систему
+    const {password, email} = state;
+    if (!password || !email) return;
+
+    onLogin(password, email)
+      // .then(() => {
+      //   setState(initValues);
+      // })
+      .catch((err) => {
+        console.log(err);
+      });
+
   }
 
-  render() {
-    return (
-      <div className="login">
-        <Header>
-          <Link to="/register" className="header__auth">Регистрация</Link>
-        </Header>
+  return (
+    <div className="login">
+      <Header>
+        <Link to="/register" className="header__auth">Регистрация</Link>
+      </Header>
 
-        <Auth
-          name="login"
-          title="Вход"
-          buttonText="Войти"
-          onSubmit={this.handleSubmit}
-        >
+      <SignForm
+        name="login"
+        title="Вход"
+        buttonText="Войти"
+        onSubmit={handleSubmit}
+      >
+        <input
+            type="text"
+            id="login-email"
+            name="login-email"
+            value={state.email}
+            onChange={handleChange}
+            placeholder="Email"
+            required
+            className="auth__input"
+          />
           <input
-              type="text"
-              id="login-email"
-              name="login-email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              placeholder="Email"
-              required
-              className="auth__input"
-            />
-            <input
-              type="text"
-              id="login-password"
-              name="login-password"
-              value={this.state.password}
-              onChange={this.handleChange}
-              placeholder="Пароль"
-              required
-              className="auth__input"
-            />
-        </Auth>
-      </div>
-    );
-  }
+            type="text"
+            id="login-password"
+            name="login-password"
+            value={state.password}
+            onChange={handleChange}
+            placeholder="Пароль"
+            required
+            className="auth__input"
+          />
+      </SignForm>
+    </div>
+  );
 }
 
-export default withRouter(Login);
+export default Login;

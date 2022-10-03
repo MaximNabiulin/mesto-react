@@ -2,73 +2,75 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from './Header';
-import Auth from './Auth';
+import SignForm from './SignForm';
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+function Register(props) {
+  const { onRegister } = props;
+  const [state, setState] = React.useState({
+    email: '',
+    password: '',
+  });
 
-  handleChange = (e) => {
-    const {name, value} = e.target;
-    this.setState({
+  const handleChange = (evt) => {
+    const {name, value} = evt.target;
+    setState((oldState) => ({
+      ...oldState,
       [name]: value
-    });
-  }
-  handleSubmit = (e) => {
-    e.preventDefault();
+    }));
+  };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const {password, email} = state;
+
     // здесь обработчик регистрации
+    onRegister(password, email)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  render() {
-    return (
-      <div className="register">
-        <Header>
-          <Link to="/login" className="header__auth">Войти</Link>
-        </Header>
+  return (
+    <div className="register">
+      <Header>
+        <Link to="/login" className="header__auth">Войти</Link>
+      </Header>
 
-        <Auth
-          name="register"
-          title="Регистрация"
-          buttonText="Зарегистрироваться"
-          onSubmit={this.handleSubmit}
-        >
+      <SignForm
+        name="register"
+        title="Регистрация"
+        buttonText="Зарегистрироваться"
+        onSubmit={handleSubmit}
+      >
+        <input
+            type="text"
+            id="register-email"
+            name="register-email"
+            value={state.email}
+            onChange={handleChange}
+            placeholder="Email"
+            required
+            className="auth__input"
+          />
           <input
-              type="text"
-              id="register-email"
-              name="register-email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              placeholder="Email"
-              required
-              className="auth__input"
-            />
-            <input
-              type="text"
-              id="register-password"
-              name="register-password"
-              value={this.state.password}
-              onChange={this.handleChange}
-              placeholder="Пароль"
-              required
-              className="auth__input"
-            />
-        </Auth>
+            type="text"
+            id="register-password"
+            name="register-password"
+            value={state.password}
+            onChange={handleChange}
+            placeholder="Пароль"
+            required
+            className="auth__input"
+          />
+      </SignForm>
 
-        <div className="register__signin">
-          <p>Уже зарегистрированы?</p>
-          <Link to="/login" className="register__login-link">Войти</Link>
-        </div>
+      <div className="register__signin">
+        <p>Уже зарегистрированы?</p>
+        <Link to="/login" className="register__login-link">Войти</Link>
       </div>
+    </div>
 
-    )
-  }
+  )
 }
 
 export default Register;

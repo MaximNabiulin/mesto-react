@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Auth(props) {
+function SignForm(props) {
   const {name, title, buttonText, children, onSubmit } = props;
 
   return (
@@ -29,4 +29,4 @@ function Auth(props) {
   )
 }
 
-export default Auth;
+export default SignForm;
