@@ -23,7 +23,6 @@ function Register(props) {
     evt.preventDefault();
     const {password, email} = state;
 
-    // здесь обработчик регистрации
     onRegister(password, email)
       .catch((err) => {
         console.log(err);
@@ -33,7 +32,7 @@ function Register(props) {
   return (
     <div className="register">
       <Header>
-        <Link to="/login" className="header__auth">Войти</Link>
+        <Link to="/login" className="header__link">Войти</Link>
       </Header>
 
       <SignForm
@@ -43,9 +42,9 @@ function Register(props) {
         onSubmit={handleSubmit}
       >
         <input
-            type="text"
+            type="email"
             id="register-email"
-            name="register-email"
+            name="email"
             value={state.email}
             onChange={handleChange}
             placeholder="Email"
@@ -53,9 +52,9 @@ function Register(props) {
             className="auth__input"
           />
           <input
-            type="text"
+            type="password"
             id="register-password"
-            name="register-password"
+            name="password"
             value={state.password}
             onChange={handleChange}
             placeholder="Пароль"
@@ -65,8 +64,8 @@ function Register(props) {
       </SignForm>
 
       <div className="register__signin">
-        <p>Уже зарегистрированы?</p>
-        <Link to="/login" className="register__login-link">Войти</Link>
+        <p className='register__text'>Уже зарегистрированы?</p>
+        <Link to="/login" className="register__text register__login-link">Войти</Link>
       </div>
     </div>
 
@@ -74,3 +73,6 @@ function Register(props) {
 }
 
 export default Register;
+
+// beelzeboss.max@yandex.ru
+// Bonedrums123

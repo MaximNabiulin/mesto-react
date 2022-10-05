@@ -1,5 +1,8 @@
 import React from 'react';
-import { Route, Switch, withRouter, Redirect, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, withRouter, useHistory } from 'react-router-dom';
+
+import registerOk from '../images/registration_ok.svg';
+import errorImg from '../images/auth_error.svg'
 
 // подключаем объект контекста
 import { CurrentUserContext } from '../context/CurrentUserContext';
@@ -16,6 +19,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import DeleteCardPopup from './DeleteCardPopup';
 import ImagePopup from './ImagePopup';
+import InfoTooltip from './InfoTooltip';
 import api from '../utils/api';
 import * as auth from '../utils/auth';
 
@@ -26,6 +30,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
+  // const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isRegisterOkTooltipOpen, setIsRegisterOkTooltipOpen] = React.useState(false);
   const [isErrorTooltipOpen, setIsErrorTooltipOpen] = React.useState(false);
 
@@ -88,6 +93,7 @@ function App() {
     setSelectedCard({});
     setIsRegisterOkTooltipOpen(false);
     setIsErrorTooltipOpen(false);
+    // setIsTooltipOpen(false);
   };
 
   // --- ОБРАБОТЧИКИ ЗАПРОСОВ ---
@@ -166,35 +172,51 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  // --- ОБРАБОТЧИКИ ДЛЯ АУТЕНТИФИКАЦИИ ---
-  // Обработчик логина
+  // --- АУТЕНТИФИКАЦИЯ ---
+
+  // Обработчик авторизации
   function handleLogin(password, email) {
     return auth.authorize(password, email)
       .then((data) => {
         if (!data.jwt) {
+          setIsErrorTooltipOpen(true);
           return Promise.reject(`Ошибка: ${data.status}`);
         }
 
         localStorage.setItem('jwt', data.jwt);
         setIsLoggedIn(oldState => ({ ...oldState, loggedIn: true }));
       })
-  };
-
-  //
-  function handleRegister(password, email) {
-    return auth.register(password, email)
-      .then(() => {
-        history.push('/login');
+      .catch(() => {
+        setIsErrorTooltipOpen(true);
       })
   };
 
-  function handleLogout() {}
+  // Обработчик регистрации
+  function handleRegister(password, email) {
+    return auth.register(password, email)
+      .then(() => {
+        setIsRegisterOkTooltipOpen(true);
+        history.push('/login');
+      })
+      .catch(() => {
+        setIsErrorTooltipOpen(true);
+      })
+  };
 
+  // Обработчик выхода из аккаунта
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    history.push('/login');
+  }
+
+  // Проверка авторизации
   React.useEffect(() => {
     if (!isLoggedIn.loggedIn) return;
     history.push('/')
   }, [isLoggedIn.loggedIn]);
 
+  // Проверка наличия токена
+  // let currentEmail
   React.useEffect(() => {
     function checkToken() {
       if (!localStorage.getItem('jwt')) return;
@@ -212,7 +234,9 @@ function App() {
               data
             });
 
+
             history.push('/');
+            // currentEmail = email;
           }
         });
     }
@@ -226,19 +250,30 @@ function App() {
       <div className="App">
         <div className="page">
           <Switch>
+
+            <Route path="/register">
+              <Register onRegister={handleRegister} />
+            </Route>
+
+            <Route path="/login">
+              <Login onLogin={handleLogin} />
+            </Route>
+
             <ProtectedRoute
               path="/"
               loggedIn={isLoggedIn.loggedIn}
             >
               <Header>
-                <p className="header__user-email">email@mail.com</p>
-                <button
-                  id="logout"
-                  onClick={handleLogout}
-                  className="header__auth"
-                  >
-                    Выйти
-                </button>
+                <div className='header__content'>
+                  <p className="header__user-email">email@mail.com</p>
+                  <button
+                    id="logout"
+                    onClick={handleLogout}
+                    className="header__button"
+                    >
+                      Выйти
+                  </button>
+                </div>
               </Header>
               <Main
                 onEditAvatar={handleEditAvatarClick}
@@ -250,13 +285,6 @@ function App() {
                 onCardDelete={handleDeleteCardBtnClick}
               />
             </ProtectedRoute>
-
-            <Route path="/register">
-              <Register onRegister={handleRegister}/>
-            </Route>
-            <Route path="/login">
-              <Login onLogin={handleLogin} />
-            </Route>
           </Switch>
           <Footer />
         </div>
@@ -293,9 +321,27 @@ function App() {
           card={selectedCard}
           onClose={closeAllPopups}
         />
+
+        <InfoTooltip
+          title="Вы успешно зарегистрировались!"
+          name="register-ok"
+          image={registerOk}
+          isOpen={isRegisterOkTooltipOpen}
+          onClose={closeAllPopups}
+        />
+
+        <InfoTooltip
+          title="Что-то пошло не так! Попробуйте ещё раз."
+          name="auth-error"
+          image={errorImg}
+          isOpen={isErrorTooltipOpen}
+          onClose={closeAllPopups}
+        />
+
       </div>
     </CurrentUserContext.Provider>
   );
 }
 
 export default App;
+// export default withRouter(App);

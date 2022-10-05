@@ -22,8 +22,6 @@ function Login(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    // здесь обрабатываем вход в систему
     const {password, email} = state;
     if (!password || !email) return;
 
@@ -34,13 +32,12 @@ function Login(props) {
       .catch((err) => {
         console.log(err);
       });
-
   }
 
   return (
     <div className="login">
       <Header>
-        <Link to="/register" className="header__auth">Регистрация</Link>
+        <Link to="/register" className="header__link">Регистрация</Link>
       </Header>
 
       <SignForm
@@ -50,9 +47,9 @@ function Login(props) {
         onSubmit={handleSubmit}
       >
         <input
-            type="text"
+            type="email"
             id="login-email"
-            name="login-email"
+            name="email"
             value={state.email}
             onChange={handleChange}
             placeholder="Email"
@@ -60,9 +57,9 @@ function Login(props) {
             className="auth__input"
           />
           <input
-            type="text"
+            type="password"
             id="login-password"
-            name="login-password"
+            name="password"
             value={state.password}
             onChange={handleChange}
             placeholder="Пароль"

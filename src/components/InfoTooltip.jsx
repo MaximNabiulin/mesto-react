@@ -9,7 +9,7 @@ function InfoTooltip(props) {
       ? `popup popup_type_${name} popup_opened`
       : `popup popup_type_${name}` }
     >
-      <div className={`popup__content popup__content_${name}`}>
+      <div className="popup__content">
         <button
           id ={`${name}-close-button`}
           type="button"
@@ -22,7 +22,7 @@ function InfoTooltip(props) {
           alt={name}
           className="auth__image"
         />
-        <h3 className="popup__title">{title}</h3>
+        <h3 className="popup__title popup__title_tooltip">{title}</h3>
       </div>
     </div>
   )

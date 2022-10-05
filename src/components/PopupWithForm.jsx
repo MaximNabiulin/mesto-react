@@ -29,7 +29,7 @@ function PopupWithForm(props) {
           >
             {children}
             <button
-              id = "profile-submit"
+              id = {`${name}-submit`}
               type="submit"
               className="popup__submit-button"
             >

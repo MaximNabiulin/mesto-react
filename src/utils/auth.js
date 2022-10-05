@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co/'
+export const baseUrl = 'https://auth.nomoreparties.co'
 
 const request = ({
   url,
@@ -6,10 +6,9 @@ const request = ({
   token,
   data,
 }) => {
-  return fetch (`${BASE_URL}${url}`, {
+  return fetch (`${baseUrl}${url}`, {
     method,
     headers: {
-      // 'Accept': 'application/json',
       'Content-Type': 'application/json',
       ...!!token && {'Authorization': `Bearer ${token}`},
     },
@@ -21,7 +20,7 @@ const request = ({
       }
       return Promise.reject(response.status);
     });
-}
+};
 
 export const register = (password, email) => {
   return request({
@@ -35,20 +34,12 @@ export const authorize = (password, email) => {
     url: '/signin',
     data: { password, email }
   });
-
-  // .then((data) => {
-  //   if (data.user){
-  //     localStorage.setItem('jwt', data.jwt);
-
-  //     return data;
-  //   }
-  // })
-  // .catch(err => console.log(err))
 };
+
 export const checkToken = (token) => {
   return request({
     url: '/users/me',
     method: 'GET',
     token,
   });
-}
+};
