@@ -32,7 +32,7 @@ function Register(props) {
   return (
     <div className="register">
       <Header>
-        <Link to="/login" className="header__link">Войти</Link>
+        <Link to="/sign-in" className="header__link">Войти</Link>
       </Header>
 
       <SignForm
@@ -65,7 +65,7 @@ function Register(props) {
 
       <div className="register__signin">
         <p className='register__text'>Уже зарегистрированы?</p>
-        <Link to="/login" className="register__text register__login-link">Войти</Link>
+        <Link to="/sign-in" className="register__text register__login-link">Войти</Link>
       </div>
     </div>
 

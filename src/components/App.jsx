@@ -47,6 +47,7 @@ function App() {
 
   // Стэйт переменные для регистрации и авторизации
   const [isLoggedIn, setIsLoggedIn] = React.useState({ loggedIn: false });
+  const [email, setEmail] = React.useState('');
   const history = useHistory();
 
   // Загружаем данные о пользователе и начальный массив карточек
@@ -178,12 +179,12 @@ function App() {
   function handleLogin(password, email) {
     return auth.authorize(password, email)
       .then((data) => {
-        if (!data.jwt) {
+        if (!data.token) {
           setIsErrorTooltipOpen(true);
           return Promise.reject(`Ошибка: ${data.status}`);
         }
 
-        localStorage.setItem('jwt', data.jwt);
+        localStorage.setItem('jwt', data.token);
         setIsLoggedIn(oldState => ({ ...oldState, loggedIn: true }));
       })
       .catch(() => {
@@ -196,7 +197,7 @@ function App() {
     return auth.register(password, email)
       .then(() => {
         setIsRegisterOkTooltipOpen(true);
-        history.push('/login');
+        history.push('/sign-in');
       })
       .catch(() => {
         setIsErrorTooltipOpen(true);
@@ -206,7 +207,7 @@ function App() {
   // Обработчик выхода из аккаунта
   function handleLogout() {
     localStorage.removeItem('jwt');
-    history.push('/login');
+    history.push('/sign-in');
   }
 
   // Проверка авторизации
@@ -216,7 +217,6 @@ function App() {
   }, [isLoggedIn.loggedIn]);
 
   // Проверка наличия токена
-  // let currentEmail
   React.useEffect(() => {
     function checkToken() {
       if (!localStorage.getItem('jwt')) return;
@@ -225,18 +225,9 @@ function App() {
       auth.checkToken(jwt)
         .then((res) => {
           if (res) {
-            const data = {
-              password: res.password,
-              email: res.email,
-            }
-            setIsLoggedIn({
-              loggedIn: true,
-              data
-            });
-
-
+            setEmail(res.data.email);
+            setIsLoggedIn({ loggedIn: true });
             history.push('/');
-            // currentEmail = email;
           }
         });
     }
@@ -251,11 +242,11 @@ function App() {
         <div className="page">
           <Switch>
 
-            <Route path="/register">
+            <Route path="/sign-up">
               <Register onRegister={handleRegister} />
             </Route>
 
-            <Route path="/login">
+            <Route path="/sign-in">
               <Login onLogin={handleLogin} />
             </Route>
 
@@ -265,7 +256,7 @@ function App() {
             >
               <Header>
                 <div className='header__content'>
-                  <p className="header__user-email">email@mail.com</p>
+                  <p className="header__user-email">{email}</p>
                   <button
                     id="logout"
                     onClick={handleLogout}

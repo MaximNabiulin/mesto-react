@@ -9,10 +9,11 @@ const request = ({
   return fetch (`${baseUrl}${url}`, {
     method,
     headers: {
+      // 'Accept': 'application/json',
       'Content-Type': 'application/json',
-      ...!!token && {'Authorization': `Bearer ${token}`},
+      ...!!token && { 'Authorization': `Bearer ${token}` },
     },
-    ...!!data && {body: JSON.stringify({ data })},
+    ...!!data && {body: JSON.stringify(data)},
   })
     .then((response) => {
       if (response.ok) {

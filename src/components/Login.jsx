@@ -37,7 +37,7 @@ function Login(props) {
   return (
     <div className="login">
       <Header>
-        <Link to="/register" className="header__link">Регистрация</Link>
+        <Link to="/sign-up" className="header__link">Регистрация</Link>
       </Header>
 
       <SignForm
